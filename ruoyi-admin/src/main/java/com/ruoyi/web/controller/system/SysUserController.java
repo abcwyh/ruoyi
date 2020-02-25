@@ -258,4 +258,16 @@ public class SysUserController extends BaseController
         userService.checkUserAllowed(user);
         return toAjax(userService.changeStatus(user));
     }
+    /**
+     * 通过角色查询用户
+     * @param roleKey 角色编码
+     */
+    @PostMapping("/selectRoleUser")
+    @ResponseBody
+    public TableDataInfo queryRoleUser(String roleKey){
+        startPage();
+        List<SysUser> list = userService.selectRoleUser(roleKey);
+        return getDataTable(list);
+
+    }
 }

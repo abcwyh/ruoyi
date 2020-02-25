@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('表格传值给父页面')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('system:organ:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('system:organ:remove')}]];
+		var prefix = ctx + "system/organ";
+		$(function() {
+			var options = {
+				url: prefix + "/list",
+
+				modalName: "机构管理",
+				columns: [{
+					radio: true
+				},
+					{
+						field : 'orgGuid',
+						title : '机构id',
+						visible: false
+					},
+					{
+						field : 'orgName',
+						title : '机构名称'
+					},
+					{
+						field : 'orgCode',
+						title : '机构编码'
+					}]
+			};
+			$.table.init(options);
+		});
+
+        /* 添加用户-选择用户-提交 */
+		function submitHandler(index, layero) {
+			var rows = $.table.selectFirstColumns();
+
+			if (rows.length == 0) {
+       			$.modal.alertWarning("请至少选择一条记录");
+       			return;
+       		}
+			$.modal.close();
+			// 父页面的方法2
+
+			var row=$("#bootstrap-table").bootstrapTable('getSelections');
+
+			 parent.selectMsg(row[0].orgGuid,row[0].orgName,row[0].orgCode);
+			// 父页面的变量
+			//alert(rows.join())
+			//parent.$('#userids').html(rows.join());
+		}
+    </script>
+</body>
+</html>

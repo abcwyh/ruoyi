@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('表格传值给父页面')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<input id="roleKey" name="roleKey" type="hidden" th:value="${roleKey}"/>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+			<div class="pull-right">
+				<button type="button" class="btn btn-sm  btn-success" onclick="onOk()"><i class="fa fa-check"></i>确 认</button>&nbsp;
+				<button type="button" class="btn btn-sm btn-danger" onclick="onCancel()"><i class="fa fa-reply-all"></i>关 闭 </button>
+			</div>
+		</div>
+
+	</div>
+
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+
+		var prefix = ctx + "system/user";
+		$(function() {
+
+			var options = {
+				url: prefix + "/selectRoleUser",
+
+				queryParams:{"roleKey":$("#roleKey").val()},
+				columns: [{
+					radio: true
+				},
+					{
+						field: 'userId',
+						title: '用户ID'
+					},
+					{
+						field: 'loginName',
+						title: '登录名称',
+						sortable: true
+					},
+					{
+						field: 'userName',
+						title: '用户名称'
+					},
+					{
+						field: 'email',
+						title: '邮箱',
+						visible: false
+					},
+					{
+						field: 'phonenumber',
+						title: '手机'
+					}]
+			};
+			$.table.init(options);
+		});
+
+
+
+        /* 添加用户-选择用户-提交 */
+			function submitHandler () {
+			var rows = $.table.selectFirstColumns();
+
+			if (rows.length == 0) {
+       			$.modal.alertWarning("请至少选择一条记录");
+       			return;
+       		}
+
+			// 父页面的方法2
+
+				var row=$("#bootstrap-table").bootstrapTable('getSelections');
+
+			return row[0].userId+","+row[0].userName+","+row[0].loginName;
+
+		}
+
+
+		function CloseWindow(action) {
+			var row=$("#bootstrap-table").bootstrapTable('getSelections');
+			if (window.CloseOwnerWindow) return window.CloseOwnerWindow(row[0].userId+","+row[0].userName+","+row[0].loginName);
+			else window.close();
+		}
+
+		function onOk() {
+			CloseWindow("ok");
+		}
+
+		function onCancel() {
+			CloseWindow("cancel");
+		}
+    </script>
+</body>
+</html>

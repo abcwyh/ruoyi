@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改机构管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-organ-edit" th:object="${orgOrgan}">
+            <input name="orgGuid" th:field="*{orgGuid}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构名称：</label>
+                <div class="col-sm-8">
+                    <input name="orgName" th:field="*{orgName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构编码：</label>
+                <div class="col-sm-8">
+                    <input name="orgCode" th:field="*{orgCode}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构地址：</label>
+                <div class="col-sm-8">
+                    <input name="orgAddress" th:field="*{orgAddress}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构电话：</label>
+                <div class="col-sm-8">
+                    <input name="orgPhone" th:field="*{orgPhone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构管理人名称：</label>
+                <div class="col-sm-8">
+                    <input name="orgUserName" th:field="*{orgUserName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构管理人电话：</label>
+                <div class="col-sm-8">
+                    <input name="orgUserPhone" th:field="*{orgUserPhone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构管理人邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="orgUserEmail" th:field="*{orgUserEmail}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">0正常 1停用：</label>
+                <div class="col-sm-8">
+                    <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="status" th:checked="${orgOrgan.status == '0' ? true : false}">
+                        <span></span>
+                    </label>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/organ";
+        $("#form-organ-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-organ-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

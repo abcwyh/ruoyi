@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ClientMsgMapper">
+    
+    <resultMap type="ClientMsg" id="ClientMsgResult">
+        <result property="msgGuid"    column="msg_guid"    />
+        <result property="msgCode"    column="msg_code"    />
+        <result property="msgName"    column="msg_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="industryType"    column="industry_type"    />
+        <result property="enrollBig"    column="enroll_big"    />
+        <result property="enrollSmall"    column="enroll_small"    />
+        <result property="theirOffice"    column="their_office"    />
+        <result property="linkman"    column="linkman"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="address"    column="address"    />
+        <result property="sourceBig"    column="source_big"    />
+        <result property="sourceSmall"    column="source_small"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="status"    column="status"    />
+        <result property="orgGuid"    column="org_guid"    />
+        <result property="orgCode"    column="org_code"    />
+    </resultMap>
+
+    <sql id="selectClientMsgVo">
+        select msg_guid, msg_code, msg_name, start_time, industry_type, enroll_big, enroll_small, their_office, linkman, phone, email, address, source_big, source_small, create_by, create_time, update_by, update_time, del_flag, status, org_guid, org_code from client_msg
+    </sql>
+
+    <select id="selectClientMsgList" parameterType="ClientMsg" resultMap="ClientMsgResult">
+        <include refid="selectClientMsgVo"/>
+        <where>  
+            <if test="msgCode != null  and msgCode != ''"> and msg_code = #{msgCode}</if>
+            <if test="msgName != null  and msgName != ''"> and msg_name like concat(concat('%', #{msgName}), '%')</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="industryType != null  and industryType != ''"> and industry_type = #{industryType}</if>
+            <if test="enrollBig != null  and enrollBig != ''"> and enroll_big = #{enrollBig}</if>
+            <if test="enrollSmall != null  and enrollSmall != ''"> and enroll_small = #{enrollSmall}</if>
+            <if test="theirOffice != null  and theirOffice != ''"> and their_office = #{theirOffice}</if>
+            <if test="linkman != null  and linkman != ''"> and linkman = #{linkman}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="sourceBig != null  and sourceBig != ''"> and source_big = #{sourceBig}</if>
+            <if test="sourceSmall != null  and sourceSmall != ''"> and source_small = #{sourceSmall}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="orgGuid != null  and orgGuid != ''"> and org_guid = #{orgGuid}</if>
+            <if test="orgCode != null  and orgCode != ''"> and org_code = #{orgCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectClientMsgById" parameterType="Long" resultMap="ClientMsgResult">
+        <include refid="selectClientMsgVo"/>
+        where msg_guid = #{msgGuid}
+    </select>
+        
+    <insert id="insertClientMsg" parameterType="ClientMsg">
+        <selectKey keyProperty="msgGuid" resultType="long" order="BEFORE">
+            SELECT seq_client_msg.NEXTVAL as msgGuid FROM DUAL
+        </selectKey>
+        insert into client_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgGuid != null ">msg_guid,</if>
+            <if test="msgCode != null  and msgCode != ''">msg_code,</if>
+            <if test="msgName != null  and msgName != ''">msg_name,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="industryType != null  and industryType != ''">industry_type,</if>
+            <if test="enrollBig != null  and enrollBig != ''">enroll_big,</if>
+            <if test="enrollSmall != null  and enrollSmall != ''">enroll_small,</if>
+            <if test="theirOffice != null  and theirOffice != ''">their_office,</if>
+            <if test="linkman != null  and linkman != ''">linkman,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="sourceBig != null  and sourceBig != ''">source_big,</if>
+            <if test="sourceSmall != null  and sourceSmall != ''">source_small,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="orgGuid != null  and orgGuid != ''">org_guid,</if>
+            <if test="orgCode != null  and orgCode != ''">org_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgGuid != null ">#{msgGuid},</if>
+            <if test="msgCode != null  and msgCode != ''">#{msgCode},</if>
+            <if test="msgName != null  and msgName != ''">#{msgName},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="industryType != null  and industryType != ''">#{industryType},</if>
+            <if test="enrollBig != null  and enrollBig != ''">#{enrollBig},</if>
+            <if test="enrollSmall != null  and enrollSmall != ''">#{enrollSmall},</if>
+            <if test="theirOffice != null  and theirOffice != ''">#{theirOffice},</if>
+            <if test="linkman != null  and linkman != ''">#{linkman},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="sourceBig != null  and sourceBig != ''">#{sourceBig},</if>
+            <if test="sourceSmall != null  and sourceSmall != ''">#{sourceSmall},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="orgGuid != null  and orgGuid != ''">#{orgGuid},</if>
+            <if test="orgCode != null  and orgCode != ''">#{orgCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClientMsg" parameterType="ClientMsg">
+        update client_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="msgCode != null  and msgCode != ''">msg_code = #{msgCode},</if>
+            <if test="msgName != null  and msgName != ''">msg_name = #{msgName},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="industryType != null  and industryType != ''">industry_type = #{industryType},</if>
+            <if test="enrollBig != null  and enrollBig != ''">enroll_big = #{enrollBig},</if>
+            <if test="enrollSmall != null  and enrollSmall != ''">enroll_small = #{enrollSmall},</if>
+            <if test="theirOffice != null  and theirOffice != ''">their_office = #{theirOffice},</if>
+            <if test="linkman != null  and linkman != ''">linkman = #{linkman},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="sourceBig != null  and sourceBig != ''">source_big = #{sourceBig},</if>
+            <if test="sourceSmall != null  and sourceSmall != ''">source_small = #{sourceSmall},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="orgGuid != null  and orgGuid != ''">org_guid = #{orgGuid},</if>
+            <if test="orgCode != null  and orgCode != ''">org_code = #{orgCode},</if>
+        </trim>
+        where msg_guid = #{msgGuid}
+    </update>
+
+    <delete id="deleteClientMsgById" parameterType="Long">
+        delete from client_msg where msg_guid = #{msgGuid}
+    </delete>
+
+    <delete id="deleteClientMsgByIds" parameterType="String">
+        delete from client_msg where msg_guid in 
+        <foreach item="msgGuid" collection="array" open="(" separator="," close=")">
+            #{msgGuid}
+        </foreach>
+    </delete>
+    
+</mapper>

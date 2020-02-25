@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>客户编码：</p>
+                                <input type="text" name="msgCode"/>
+                            </li>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="msgName"/>
+                            </li>
+                            <li class="select-time">
+                                <p>开业日期：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartTime]"/>
+                            </li>
+                            <li>
+                                <p>行业类型：</p>
+                                <select name="industryType" th:with="type=${@dict.getType('')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>登记小类：</p>
+                                <input type="text" name="enrollBig"/>
+                            </li>
+                            <li>
+                                <p>登记大类：</p>
+                                <input type="text" name="enrollSmall"/>
+                            </li>
+                            <li>
+                                <p>所属机关：</p>
+                                <input type="text" name="theirOffice"/>
+                            </li>
+                            <li>
+                                <p>联系人：</p>
+                                <input type="text" name="linkman"/>
+                            </li>
+                            <li>
+                                <p>联系电话：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>邮箱：</p>
+                                <input type="text" name="email"/>
+                            </li>
+                            <li>
+                                <p>地址：</p>
+                                <input type="text" name="address"/>
+                            </li>
+                            <li>
+                                <p>来源大类：</p>
+                                <input type="text" name="sourceBig"/>
+                            </li>
+                            <li>
+                                <p>来源小类：</p>
+                                <input type="text" name="sourceSmall"/>
+                            </li>
+                            <li>
+                                <p>0正常 1停用：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>机构id：</p>
+                                <input type="text" name="orgGuid"/>
+                            </li>
+                            <li>
+                                <p>机构编码：</p>
+                                <input type="text" name="orgCode"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="system:msg:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.editTab()" shiro:hasPermission="system:msg:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:msg:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:msg:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:msg:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:msg:remove')}]];
+        var prefix = ctx + "system/msg";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'msgGuid', 
+                    title : '客户信息id',
+                    visible: false
+                },
+                {
+                    field : 'msgCode', 
+                    title : '客户编码'
+                },
+                {
+                    field : 'msgName', 
+                    title : '客户名称'
+                },
+                {
+                    field : 'startTime', 
+                    title : '开业日期'
+                },
+                {
+                    field : 'industryType', 
+                    title : '行业类型'
+                },
+                {
+                    field : 'enrollBig', 
+                    title : '登记小类'
+                },
+                {
+                    field : 'enrollSmall', 
+                    title : '登记大类'
+                },
+                {
+                    field : 'theirOffice', 
+                    title : '所属机关'
+                },
+                {
+                    field : 'linkman', 
+                    title : '联系人'
+                },
+                {
+                    field : 'phone', 
+                    title : '联系电话'
+                },
+                {
+                    field : 'email', 
+                    title : '邮箱'
+                },
+                {
+                    field : 'address', 
+                    title : '地址'
+                },
+                {
+                    field : 'sourceBig', 
+                    title : '来源大类'
+                },
+                {
+                    field : 'sourceSmall', 
+                    title : '来源小类'
+                },
+                {
+                    field : 'status', 
+                    title : '0正常 1停用'
+                },
+                {
+                    field : 'orgGuid', 
+                    title : '机构id'
+                },
+                {
+                    field : 'orgCode', 
+                    title : '机构编码'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.msgGuid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.msgGuid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

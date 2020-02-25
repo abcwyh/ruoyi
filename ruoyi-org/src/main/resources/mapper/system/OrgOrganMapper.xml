@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OrgOrganMapper">
+    
+    <resultMap type="OrgOrgan" id="OrgOrganResult">
+        <result property="orgGuid"    column="org_guid"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="orgCode"    column="org_code"    />
+        <result property="orgAddress"    column="org_address"    />
+        <result property="orgPhone"    column="org_phone"    />
+        <result property="orgUserName"    column="org_user_name"    />
+        <result property="orgUserPhone"    column="org_user_phone"    />
+        <result property="orgUserEmail"    column="org_user_email"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectOrgOrganVo">
+        select org_guid, org_name, org_code, org_address, org_phone, org_user_name, org_user_phone, org_user_email, create_by, create_time, update_by, update_time, remark, status, del_flag from org_organ
+    </sql>
+
+    <select id="selectOrgOrganList" parameterType="OrgOrgan" resultMap="OrgOrganResult">
+        <include refid="selectOrgOrganVo"/>
+        <where>  
+            <if test="orgName != null  and orgName != ''"> and org_name like concat(concat('%', #{orgName}), '%')</if>
+            <if test="orgCode != null  and orgCode != ''"> and org_code = #{orgCode}</if>
+            <if test="orgAddress != null  and orgAddress != ''"> and org_address = #{orgAddress}</if>
+            <if test="orgPhone != null  and orgPhone != ''"> and org_phone = #{orgPhone}</if>
+            <if test="orgUserName != null  and orgUserName != ''"> and org_user_name like concat(concat('%', #{orgUserName}), '%')</if>
+            <if test="orgUserPhone != null  and orgUserPhone != ''"> and org_user_phone = #{orgUserPhone}</if>
+            <if test="orgUserEmail != null  and orgUserEmail != ''"> and org_user_email = #{orgUserEmail}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectOrgOrganById" parameterType="Long" resultMap="OrgOrganResult">
+        <include refid="selectOrgOrganVo"/>
+        where org_guid = #{orgGuid}
+    </select>
+        
+    <insert id="insertOrgOrgan" parameterType="OrgOrgan">
+        <selectKey keyProperty="orgGuid" resultType="long" order="BEFORE">
+            SELECT seq_org_organ.NEXTVAL as orgGuid FROM DUAL
+        </selectKey>
+        insert into org_organ
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgGuid != null ">org_guid,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="orgCode != null  and orgCode != ''">org_code,</if>
+            <if test="orgAddress != null  and orgAddress != ''">org_address,</if>
+            <if test="orgPhone != null  and orgPhone != ''">org_phone,</if>
+            <if test="orgUserName != null  and orgUserName != ''">org_user_name,</if>
+            <if test="orgUserPhone != null  and orgUserPhone != ''">org_user_phone,</if>
+            <if test="orgUserEmail != null  and orgUserEmail != ''">org_user_email,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgGuid != null ">#{orgGuid},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="orgCode != null  and orgCode != ''">#{orgCode},</if>
+            <if test="orgAddress != null  and orgAddress != ''">#{orgAddress},</if>
+            <if test="orgPhone != null  and orgPhone != ''">#{orgPhone},</if>
+            <if test="orgUserName != null  and orgUserName != ''">#{orgUserName},</if>
+            <if test="orgUserPhone != null  and orgUserPhone != ''">#{orgUserPhone},</if>
+            <if test="orgUserEmail != null  and orgUserEmail != ''">#{orgUserEmail},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrgOrgan" parameterType="OrgOrgan">
+        update org_organ
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="orgCode != null  and orgCode != ''">org_code = #{orgCode},</if>
+            <if test="orgAddress != null  and orgAddress != ''">org_address = #{orgAddress},</if>
+            <if test="orgPhone != null  and orgPhone != ''">org_phone = #{orgPhone},</if>
+            <if test="orgUserName != null  and orgUserName != ''">org_user_name = #{orgUserName},</if>
+            <if test="orgUserPhone != null  and orgUserPhone != ''">org_user_phone = #{orgUserPhone},</if>
+            <if test="orgUserEmail != null  and orgUserEmail != ''">org_user_email = #{orgUserEmail},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where org_guid = #{orgGuid}
+    </update>
+
+    <delete id="deleteOrgOrganById" parameterType="Long">
+        delete from org_organ where org_guid = #{orgGuid}
+    </delete>
+
+    <delete id="deleteOrgOrganByIds" parameterType="String">
+        delete from org_organ where org_guid in 
+        <foreach item="orgGuid" collection="array" open="(" separator="," close=")">
+            #{orgGuid}
+        </foreach>
+    </delete>
+    
+</mapper>

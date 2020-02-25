@@ -83,7 +83,7 @@
                     title: '用户状态',
                     align: 'center',
                     editable : {
-						type : 'select',
+						type : 'select2',
 						title : '状态',
 						source : [{
 							value : 0,
@@ -114,8 +114,13 @@
         
         /* 查询表格所有数据值 */
         function getData(){
-        	var data = $("#" + table.options.id).bootstrapTable('getData');
-            alert(JSON.stringify(data))
+        	/*var data = $("#" + table.options.id).bootstrapTable('getData');
+            alert(JSON.stringify(data))*/
+			/*$('#bootstrap-table').bootstrapTable('append',_data);*/
+			var count = $('#bootstrap-table').bootstrapTable('getData').length;
+			alert(count);
+			var tabli = "bootstrap-table";
+			$('#'+tabli+'').bootstrapTable('insertRow',{index:count,row:{status:"1"}});
         }
         
         /* 查询表格选择行数据值 */

@@ -1,6 +1,11 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.alibaba.druid.support.json.JSONUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,12 +50,28 @@ public class SysDictDataController extends BaseController
     @PostMapping("/list")
     @RequiresPermissions("system:dict:list")
     @ResponseBody
-    public TableDataInfo list(SysDictData dictData)
+    public  List<SysDictData> list(SysDictData dictData)
     {
-        startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
-        return getDataTable(list);
+        return list;
     }
+
+    @RequestMapping(value="/findData")
+    @ResponseBody
+    public String queryData(String dictType,String parentId){
+        List<SysDictData> prepare =dictDataService.selectDictDataByTypes(dictType,parentId);
+        List<Map<String, Object>> ddList = new ArrayList<Map<String, Object>>();
+        if(prepare.size()>0){
+            for(SysDictData dic : prepare){
+                Map<String, Object> prepareResult = new HashMap<String, Object>();
+                prepareResult.put("id",dic.getDictValue());
+                prepareResult.put("text",dic.getDictLabel());
+                ddList.add(prepareResult);
+            }
+        }
+        return   JSONUtils.toJSONString(ddList);
+    }
+
 
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:dict:export")
@@ -69,7 +90,17 @@ public class SysDictDataController extends BaseController
     @GetMapping("/add/{dictType}")
     public String add(@PathVariable("dictType") String dictType, ModelMap mmap)
     {
-        mmap.put("dictType", dictType);
+        if(dictType.contains("*")){
+            SysDictData dic= dictDataService.selectDictDataById(Long.parseLong(dictType.substring(dictType.indexOf("*")+1)) );
+            mmap.put("dictType", dictType.substring(0,dictType.indexOf("*")));
+            mmap.put("dictCode", dictType.substring(dictType.indexOf("*")+1));
+            mmap.put("dictLevel", (Integer.parseInt(dic.getDictLevel())+1));
+
+        }else{
+            mmap.put("dictType", dictType);
+            mmap.put("dictCode", 0);
+            mmap.put("dictLevel", 1);
+        }
         return prefix + "/add";
     }
 
@@ -111,10 +142,11 @@ public class SysDictDataController extends BaseController
 
     @Log(title = "字典数据", businessType = BusinessType.DELETE)
     @RequiresPermissions("system:dict:remove")
-    @PostMapping("/remove")
+    @GetMapping("/remove/{dictCode}")
     @ResponseBody
-    public AjaxResult remove(String ids)
+    public AjaxResult remove(@PathVariable("dictCode")String ids)
     {
         return toAjax(dictDataService.deleteDictDataByIds(ids));
     }
+
 }

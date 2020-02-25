@@ -51,6 +51,41 @@ public class SysDictData extends BaseEntity
     /** 状态（0正常 1停用） */
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
+    /** 组级 */
+    @Excel(name = "组级")
+    private String ancestors;
+
+    /** 等级 */
+    @Excel(name = "等级")
+    private String dictLevel;
+
+    /** 上级id */
+    @Excel(name = "上级id")
+    private String parentId;
+
+    public String getAncestors() {
+        return ancestors;
+    }
+
+    public void setAncestors(String ancestors) {
+        this.ancestors = ancestors;
+    }
+
+    public String getDictLevel() {
+        return dictLevel;
+    }
+
+    public void setDictLevel(String dictLevel) {
+        this.dictLevel = dictLevel;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public Long getDictCode()
     {
@@ -170,6 +205,9 @@ public class SysDictData extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("ancestors", getAncestors())
+            .append("dictLevel", getDictLevel())
+            .append("parentId", getParentId())
             .append("remark", getRemark())
             .toString();
     }

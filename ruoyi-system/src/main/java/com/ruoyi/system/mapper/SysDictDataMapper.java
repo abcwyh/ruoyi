@@ -92,4 +92,24 @@ public interface SysDictDataMapper
      * @return 结果
      */
     public int updateDictDataType(@Param("oldDictType") String oldDictType, @Param("newDictType") String newDictType);
+
+    /**
+     * 根据字典类型查询字典数据
+     *
+     * @param dictType 字典类型
+     *  @param parentId 字典类型
+     * @return 字典数据集合信息
+     */
+    public List<SysDictData> selectDictDataByTypes(@Param("dictType") String dictType,@Param("parentId") String parentId);
+
+    /**
+     * 根据字典类型和字典键值查询字典数据信息
+     *
+     * @param dictType 字典类型
+     * @param dictValue 字典键值
+     * @param parentId 字典键值
+     * @return 字典标签
+     */
+    public String selectDictLabels(@Param("dictType") String dictType, @Param("dictValue") String dictValue,@Param("dictValue") String parentId);
+
 }

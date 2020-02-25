@@ -179,4 +179,11 @@ public interface ISysUserService
      * @return 结果
      */
     public int changeStatus(SysUser user);
+    /**
+     * 通过角色查询用户
+     *
+     * @param roleKey 角色编码
+     * @return 结果
+     */
+    public List<SysUser> selectRoleUser(String roleKey);
 }

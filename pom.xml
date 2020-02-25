@@ -32,6 +32,8 @@
 		<poi.version>3.17</poi.version>
 		<velocity.version>1.7</velocity.version>
 		<oracle.version>10.2.0.4.0</oracle.version>
+		<!--Activiti 启动器版本-->
+		<activiti.starter.version>6.0.0</activiti.starter.version>
 	</properties>
 	
     <!-- 依赖声明 -->
@@ -203,7 +205,25 @@
 	            <artifactId>ruoyi-common</artifactId>
 	            <version>${ruoyi.version}</version>
 	        </dependency>
-	        
+			<!-- 流程工具-->
+			<dependency>
+				<groupId>com.ruoyi</groupId>
+				<artifactId>ruoyi-process</artifactId>
+				<version>${ruoyi.version}</version>
+			</dependency>
+			<!-- 机构管理-->
+			<dependency>
+				<groupId>com.ruoyi</groupId>
+				<artifactId>ruoyi-org</artifactId>
+				<version>${ruoyi.version}</version>
+			</dependency>
+
+			<!-- 客户管理-->
+			<dependency>
+				<groupId>com.ruoyi</groupId>
+				<artifactId>ruoyi-client </artifactId>
+				<version>${ruoyi.version}</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -214,7 +234,10 @@
 		<module>ruoyi-quartz</module>
 		<module>ruoyi-generator</module>
         <module>ruoyi-common</module>
-    </modules>
+		<module>ruoyi-process</module>
+        <module>ruoyi-org</module>
+		<module>ruoyi-client</module>
+	</modules>
     <packaging>pom</packaging>
 
 

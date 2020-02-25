@@ -39,4 +39,28 @@ public class DictService
     {
         return dictDataService.selectDictLabel(dictType, dictValue);
     }
+
+    /**
+     * 根据字典类型，父级查询字典数据信息
+     *
+     * @param dictType 字典类型
+     * @return 参数键值
+     */
+    public List<SysDictData> getTypes(String dictType,String parentId)
+    {
+
+        return dictDataService.selectDictDataByTypes(dictType,parentId);
+    }
+
+    /**
+     * 根据字典类型和字典键值查询字典数据信息
+     *
+     * @param dictType 字典类型
+     * @param dictValue 字典键值
+     * @return 字典标签
+     */
+    public String getLabels(String dictType, String dictValue,String parentId)
+    {
+        return dictDataService.selectDictLabels(dictType, dictValue,parentId);
+    }
 }

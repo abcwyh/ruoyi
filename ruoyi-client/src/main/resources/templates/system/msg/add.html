@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增客户信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-editable-css" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-msg-add">
+            <input name="orgGuid" type="hidden" id="orgGuid"/>
+            <input name="orgCode" type="hidden" id="orgCode"/>
+            <h4 class="form-header h4">客户信息</h4>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">客户编码：</label>
+                        <div class="col-sm-8">
+                            <input name="msgCode" class="form-control" type="text" maxlength="18">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">客户名称：</label>
+                        <div class="col-sm-8">
+                            <input name="msgName" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">开业日期：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input name="startTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">归属机构：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input name="orgName" onclick="selectOrg()" id="orgName" type="text" placeholder="请选择归属机构" class="form-control" required>
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">行业类型：</label>
+                        <div class="col-sm-8">
+                            <select name="industryType" class="form-control m-b" th:with="type=${@dict.getType('industry_type')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">登记大类：</label>
+                        <div class="col-sm-8">
+                            <select name="enrollBig" class="form-control m-b" th:with="type=${@dict.getTypes('register_type','0')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:name="${dict.dictCode}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">登记小类：</label>
+                        <div class="col-sm-8">
+                            <select name="enrollSmall" class="form-control m-b">
+                                <option value="">所有</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">所属机关：</label>
+                        <div class="col-sm-8">
+                            <select name="theirOffice" class="form-control m-b" th:with="type=${@dict.getType('organ_type')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">联系人：</label>
+                        <div class="col-sm-8">
+                            <input name="linkman" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">联系电话：</label>
+                        <div class="col-sm-8">
+                            <input name="phone" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">邮箱：</label>
+                        <div class="col-sm-8">
+                            <input name="email" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">地址：</label>
+                        <div class="col-sm-8">
+                            <input id="address" name="address" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">来源大类：</label>
+                        <div class="col-sm-8">
+                            <select name="sourceBig" class="form-control m-b" th:with="type=${@dict.getTypes('AATE_REGIST_TYPE','0')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:name="${dict.dictCode}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">来源小类：</label>
+                        <div class="col-sm-8">
+                            <select name="sourceSmall" class="form-control m-b">
+                                <option value="">所有</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">客户状态：</label>
+                        <div class="col-sm-8">
+                                <label class="toggle-switch switch-solid">
+                                    <input type="checkbox" id="status" checked>
+                                    <span></span>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">客户管理人信息</h4>
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <div id="userGrid" class="mini-datagrid" style="width:100%;height:300px;"
+                         allowResize="false"
+                         showColumnsMenu="true"
+                         borderStyle="border-width:1px"
+                         showPagerButtonText="true"
+
+                         multiSelect="true"
+                         allowCellEdit="true"
+                         allowCellSelect="true"
+                         showPager="false"
+                        >
+                        <div property="columns">
+                            <div type="checkcolumn"></div>
+                            <div field="roleCode" vtype="required" name="roleCode" displayField="roleName" width="200" headerAlign="center">客户原管理人类型
+                                <input id="roleName" property="editor" class="mini-combobox" url="/system/dict/data/findData?dictType=custodian_type&parentId=0"
+                                       style="width:100%;" />
+                            </div>
+                            <div  field="userCode" name="userCode" vtype="required" displayField="userName"  width="200" headerAlign="center">客户原管理人姓名
+                                <input   property="editor" class="mini-buttonedit"
+                                         onbuttonclick= onUserEdit allowInput="false" style="width:100%;" required="true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" >
+                        <a class="btn btn-success" onclick="addUser()" >
+                            <i class="fa fa-plus"></i> 人员添加
+                        </a>
+                        <a class="btn btn-danger" onclick="removeUser()" >
+                            <i class="fa fa-remove"></i> 人员删除
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+            <h4 class="form-header h4">开票信息</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="invoiceGrid" class="mini-datagrid" style="width:100%;height:300px;"
+                         allowResize="false"
+                         showColumnsMenu="true"
+                         borderStyle="border-width:1px"
+                         showPagerButtonText="true"
+
+                         multiSelect="true"
+                         allowCellEdit="true"
+                         allowCellSelect="true"
+                         showPager="false">
+                        <div property="columns">
+                            <div type="checkcolumn"></div>
+                            <div field="onlyId" width="120" headerAlign="center" vtype="required">纳税登记号
+                                <input property="editor" class="mini-textbox" style="width:100%;"/>
+                            </div>
+                            <div field="depositBank" width="120" headerAlign="center">开户银行
+                                <input property="editor" class="mini-textbox" style="width:100%;"/>
+                            </div>
+                            <div field="invoiceAccount" width="120" headerAlign="center">开户银行账号
+                                <input property="editor" class="mini-textbox" style="width:100%;"/>
+                            </div>
+                            <div field="invoiceAddress" width="120" headerAlign="center">营业地址
+                                <input property="editor" class="mini-textbox" style="width:100%;"/>
+                            </div>
+                            <div field="invoicePhone" width="120" headerAlign="center">电话号码
+                                <input property="editor" class="mini-textbox" style="width:100%;"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" >
+                        <a class="btn btn-success" onclick="addInvoice()" >
+                            <i class="fa fa-plus"></i> 开票添加
+                        </a>
+                        <a class="btn btn-danger" onclick="removeInvoice()" >
+                            <i class="fa fa-remove"></i> 开票删除
+                        </a>
+                        <button type="button" class="btn  btn-primary" onclick="submitHandler()">
+                            <i class="fa fa-check"></i>保 存</button>&nbsp;
+                         </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <th:block th:include="include :: footer" />
+
+    <th:block th:include="include :: datetimepicker-js" />
+
+    <th:block th:include="include :: select2-js" />
+    <script th:src="@{/scripts/miniui/miniui.js}"></script>
+    <link th:href="@{/scripts/miniui/themes/default/miniui.css}" rel="stylesheet"/>
+    <link th:href="@{/scripts/miniui/themes/bootstrap/skin.css}" rel="stylesheet"/>
+    <script type="text/javascript">
+
+        mini.parse();
+        var prefix = ctx + "system/msg"
+        var userGrid = mini.get("userGrid");
+        var invoiceGrid= mini.get("invoiceGrid");
+
+        function addUser(){
+            var newRow = { name: "New Row" };
+            userGrid.addRow(newRow, 0);
+            userGrid.beginEditRow(newRow);
+        }
+        function removeUser() {
+            var rows = userGrid.getSelecteds();
+
+            if (rows.length > 0) {
+                userGrid.removeRows(rows, true);//进行行删除
+            }else{
+                $.modal.msgWarning("请选中一条记录");
+            }
+        }
+        function addInvoice(){
+            var newRow = { name: "New Row" };
+            invoiceGrid.addRow(newRow, 0);
+            invoiceGrid.beginEditRow(newRow);
+        }
+        function removeInvoice() {
+            var rows = invoiceGrid.getSelecteds();
+            if (rows.length > 0) {
+                invoiceGrid.removeRows(rows, true);//进行行删除
+            }else{
+                $.modal.msgWarning("请选中一条记录");
+            }
+        }
+        $("#form-msg-add").validate({
+            focusCleanup: true
+        });
+        $("select[name='sourceBig']").change(function () {
+            var levelUrl=ctx+"system/dict/data/list";
+            var data={parentId:$("select[name='sourceBig'] option:selected").attr("name")};
+            levelShow(levelUrl,"sourceSmall",data);
+        });
+        $("select[name='enrollBig']").change(function () {
+            var levelUrl=ctx+"system/dict/data/list";
+            var data={parentId:$("select[name='enrollBig'] option:selected").attr("name")};
+            levelShow(levelUrl,"enrollSmall",data);
+        });
+
+
+        $("input[name='startTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+        function selectOrg() {
+            $.modal.open("选择机构", prefix + "/selectOrg");
+        }
+        function onUserEdit(e) {
+          var  editor = this;
+          var  row = userGrid.getEditorOwnerRow(editor);
+           mini.open({
+                url: prefix + "/selectUser?roleKey="+row.roleCode,
+                title: "选择机构", width:800, height: 500,
+                ondestroy: function (action) {
+                    if(action!="cancel"){
+                        editor.setText( action.split(",")[1])
+                        editor.setValue(action.split(",")[2])
+                    }
+
+                }
+            });
+
+        }
+        function selectMsg(orgId,orgName,orgCode) {
+        $("#orgGuid").val(orgId);
+        $("#orgCode").val(orgCode);
+        $("#orgName").val(orgName);
+        }
+        function submitHandler() {
+            if ($.validate.form()) {
+
+                $.operate.save(prefix + "/add", $('#form-msg-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

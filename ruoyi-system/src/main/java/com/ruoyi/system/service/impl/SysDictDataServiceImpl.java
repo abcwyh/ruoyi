@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.constant.UserConstants;
+import com.ruoyi.common.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
@@ -101,6 +104,13 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     @Override
     public int insertDictData(SysDictData dictData)
     {
+        if(!(dictData.getParentId().equals("0"))){
+            SysDictData info = dictDataMapper.selectDictDataById(Long.parseLong(dictData.getParentId()));
+            if(!UserConstants.DEPT_NORMAL.equals(info.getStatus())){
+                throw new BusinessException("字典停用，不允许新增");
+            }
+            dictData.setAncestors(info.getAncestors()+","+dictData.getParentId());
+        }
         return dictDataMapper.insertDictData(dictData);
     }
 
@@ -115,4 +125,32 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     {
         return dictDataMapper.updateDictData(dictData);
     }
+    /**
+     * 根据字典类型查询字典数据
+     *
+     * @param dictType 字典类型
+     * @return 字典数据集合信息
+     */
+    @Override
+    public List<SysDictData> selectDictDataByTypes(String dictType,String parentId)
+    {
+
+        return dictDataMapper.selectDictDataByTypes(dictType,parentId);
+    }
+
+    /**
+     * 根据字典类型和字典键值查询字典数据信息
+     *
+     * @param dictType 字典类型
+     * @param dictValue 字典键值
+     * @param parentId 父级id
+     * @return 字典标签
+     */
+    @Override
+    public String selectDictLabels(String dictType, String dictValue,String parentId)
+    {
+        return dictDataMapper.selectDictLabels(dictType, dictValue,parentId);
+    }
+
+
 }

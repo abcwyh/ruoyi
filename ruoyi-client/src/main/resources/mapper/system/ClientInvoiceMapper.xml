@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ClientInvoiceMapper">
+    
+    <resultMap type="ClientInvoice" id="ClientInvoiceResult">
+        <result property="invoiceId"    column="invoice_id"    />
+        <result property="invoiceRegister"    column="invoice_register"    />
+        <result property="msgGuid"    column="msg_guid"    />
+        <result property="openingBank"    column="opening_bank"    />
+        <result property="bankNumber"    column="bank_number"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectClientInvoiceVo">
+        select invoice_id, invoice_register, msg_guid, opening_bank, bank_number, address, phone, create_by, create_time, update_by, update_time, del_flag from client_invoice
+    </sql>
+
+    <select id="selectClientInvoiceList" parameterType="ClientInvoice" resultMap="ClientInvoiceResult">
+        <include refid="selectClientInvoiceVo"/>
+        <where>  
+            <if test="invoiceRegister != null  and invoiceRegister != ''"> and invoice_register = #{invoiceRegister}</if>
+            <if test="msgGuid != null  and msgGuid != ''"> and msg_guid = #{msgGuid}</if>
+            <if test="openingBank != null  and openingBank != ''"> and opening_bank = #{openingBank}</if>
+            <if test="bankNumber != null  and bankNumber != ''"> and bank_number = #{bankNumber}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+        </where>
+    </select>
+    
+    <select id="selectClientInvoiceById" parameterType="Long" resultMap="ClientInvoiceResult">
+        <include refid="selectClientInvoiceVo"/>
+        where invoice_id = #{invoiceId}
+    </select>
+        
+    <insert id="insertClientInvoice" parameterType="ClientInvoice">
+        <selectKey keyProperty="invoiceId" resultType="long" order="BEFORE">
+            SELECT seq_client_invoice.NEXTVAL as invoiceId FROM DUAL
+        </selectKey>
+        insert into client_invoice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="invoiceId != null ">invoice_id,</if>
+            <if test="invoiceRegister != null  and invoiceRegister != ''">invoice_register,</if>
+            <if test="msgGuid != null  and msgGuid != ''">msg_guid,</if>
+            <if test="openingBank != null  and openingBank != ''">opening_bank,</if>
+            <if test="bankNumber != null  and bankNumber != ''">bank_number,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="invoiceId != null ">#{invoiceId},</if>
+            <if test="invoiceRegister != null  and invoiceRegister != ''">#{invoiceRegister},</if>
+            <if test="msgGuid != null  and msgGuid != ''">#{msgGuid},</if>
+            <if test="openingBank != null  and openingBank != ''">#{openingBank},</if>
+            <if test="bankNumber != null  and bankNumber != ''">#{bankNumber},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClientInvoice" parameterType="ClientInvoice">
+        update client_invoice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="invoiceRegister != null  and invoiceRegister != ''">invoice_register = #{invoiceRegister},</if>
+            <if test="msgGuid != null  and msgGuid != ''">msg_guid = #{msgGuid},</if>
+            <if test="openingBank != null  and openingBank != ''">opening_bank = #{openingBank},</if>
+            <if test="bankNumber != null  and bankNumber != ''">bank_number = #{bankNumber},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where invoice_id = #{invoiceId}
+    </update>
+
+    <delete id="deleteClientInvoiceById" parameterType="Long">
+        delete from client_invoice where invoice_id = #{invoiceId}
+    </delete>
+
+    <delete id="deleteClientInvoiceByIds" parameterType="String">
+        delete from client_invoice where invoice_id in 
+        <foreach item="invoiceId" collection="array" open="(" separator="," close=")">
+            #{invoiceId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -477,4 +477,14 @@ public class SysUserServiceImpl implements ISysUserService
     {
         return userMapper.updateUser(user);
     }
+    /**
+     * 通过角色查询用户
+     *
+     * @param roleKey 角色ID
+     * @return 结果
+     */
+    @Override
+    public List<SysUser> selectRoleUser(String  roleKey) {
+        return userMapper.selectRoleUser(roleKey);
+    }
 }
